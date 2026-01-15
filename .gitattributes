@@ -1,0 +1,2 @@
+*.exe filter=lfs diff=lfs merge=lfs -text
+proga.exe filter=lfs diff=lfs merge=lfs -text
