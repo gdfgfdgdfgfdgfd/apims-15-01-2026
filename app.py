@@ -2,12 +2,13 @@ import tkinter as tk
 from tkinter import messagebox
 from PIL import Image, ImageTk
 import os
+import sys
 
 root = tk.Tk()
 root.title("Меню Tkinter")
 root.geometry("400x300")
 
-devices = ["Камера", "Микроконтроллер", "Датчик движения", "Термометр", "Андрей Зеленин"]
+devices = ["Камера", "Микроконтроллер", "Датчик движения", "Термометр"]
 
 specs = {
     "Камера": ["Разрешение: 4K", "Угол: 120°", "Ночное видение"],
@@ -34,8 +35,14 @@ def show_image(device):
     image_label = tk.Label(window)
     image_label.pack()
 
-    image_folder = "images"
-    image_file = os.path.join(image_folder, f"{device.lower().replace(' ', '_')}.jpg")
+    # Загрузка изображения из текущей папки
+    image_file = f"{device.lower().replace(' ', '_')}.jpg"
+
+    # Проверка, запущено ли приложение из .exe
+    if getattr(sys, 'frozen', False):
+        image_file = os.path.join(sys._MEIPASS, image_file)
+    else:
+        image_file = os.path.join(os.path.dirname(__file__), image_file)
 
     if os.path.isfile(image_file):
         img = Image.open(image_file)
@@ -64,8 +71,7 @@ file_menu.add_command(label="Выход", command=root.quit)
 image_menu = tk.Menu(menubar, tearoff=0)
 menubar.add_cascade(label="Изображение", menu=image_menu)
 for d in devices:
-    image_menu.add_command(label=d, command=lambdagit --version
-    dev=d: show_image(dev))
+    image_menu.add_command(label=d, command=lambda dev=d: show_image(dev))
 
 specs_menu = tk.Menu(menubar, tearoff=0)
 menubar.add_cascade(label="Характеристики", menu=specs_menu)
